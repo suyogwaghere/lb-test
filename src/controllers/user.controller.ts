@@ -4,6 +4,7 @@ import {repository} from '@loopback/repository';
 import {get, post, requestBody} from '@loopback/rest';
 import {UserProfile} from '@loopback/security';
 import * as _ from 'lodash';
+import {PermissionKeys} from '../authorization/permission-keys';
 import {PasswordHasherBindings, TokenServiceBindings, UserServiceBindings} from '../keys';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories';
@@ -45,18 +46,10 @@ export class SignupController {
       },
     },
   })
-  // @response(200, {
-  //   description: 'User',
-  //   content: {
-  //     'application/json': {
-  //       schema: {
-  //         'x-ts-type': User,
-  //       },
-  //     },
-  //   },
-  // })
+
   async signup(@requestBody() userData: User): Promise<Pick<User, "id" | "email" | "firstName" | "lastName" | "getId" | "getIdObject" | "toJSON" | "toObject">>{
     validateCredentials(_.pick(userData, ['email', 'password']))
+    userData.permissions = [PermissionKeys.AccessAuthFeature];
     userData.password = await this.hasher.hashPassword(userData.password);
 
 
