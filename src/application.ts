@@ -1,16 +1,22 @@
+
+import {AuthenticationComponent, registerAuthenticationStrategy} from '@loopback/authentication';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
-import {
-  RestExplorerBindings,
-  RestExplorerComponent,
-} from '@loopback/rest-explorer';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
+import {
+  RestExplorerBindings,
+  RestExplorerComponent
+} from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
+import {JWTStrategy} from './authentication-strategies/jwt-strategy';
 import {MySequence} from './sequence';
+import {BcryptHasher} from './services/hash.password.bcrypt';
+import {JWTService} from './services/jwt-service';
+import {MyUserService} from './services/user-service';
 
-export {ApplicationConfig};
+
 
 export class LbTestApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -18,6 +24,10 @@ export class LbTestApplication extends BootMixin(
   constructor(options: ApplicationConfig = {}) {
     super(options);
 
+    // Set up binding for the component
+    this.setUpBindings();
+    this.component(AuthenticationComponent);
+    registerAuthenticationStrategy(this, JWTStrategy);
     // Set up the custom sequence
     this.sequence(MySequence);
 
@@ -41,4 +51,14 @@ export class LbTestApplication extends BootMixin(
       },
     };
   }
+  setUpBindings():  void {
+    this.bind('services.hasher').toClass(BcryptHasher);
+    this.bind('services.hasher.rounds').to(10);
+    this.bind('services.user.service').toClass(MyUserService);
+    this.bind('services.jwt.service').toClass(JWTService);
+    this.bind('authentication.jwt.secret').to('138asda8213');
+    this.bind('authentication.jwt.expiresIn').to('7h');
+  }
 }
+export {ApplicationConfig};
+

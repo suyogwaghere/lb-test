@@ -33,6 +33,8 @@ export class User extends Entity {
   })
   lastName: string;
 
+  @property.array(String)
+    permissions?:string[];
 
   constructor(data?: Partial<User>) {
     super(data);

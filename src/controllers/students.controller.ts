@@ -1,10 +1,11 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -15,7 +16,7 @@ import {
   post,
   put,
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
 import {Students} from '../models';
 import {StudentsRepository} from '../repositories';
@@ -59,6 +60,7 @@ export class StudentsController {
   }
 
   @get('/students')
+    @authenticate('jwt')
   @response(200, {
     description: 'Array of Students model instances',
     content: {
