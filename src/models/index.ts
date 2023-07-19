@@ -5,3 +5,4 @@ export * from './address.model';
 export * from './enrollment.model';
 export * from './roles.model';
 export * from './user.model';
+export * from './job.model';

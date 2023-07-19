@@ -60,7 +60,7 @@ export class StudentsController {
   }
 
   @get('/students')
-    @authenticate('jwt')
+  @authenticate('jwt')
   @response(200, {
     description: 'Array of Students model instances',
     content: {

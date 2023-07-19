@@ -49,6 +49,7 @@ export class MyUserService implements UserService<User, Credentials> {
        id: `${user.id}`,
        name: userName,
        [securityId]: `${user.id}`, // Set the security identifier using the user's id
+       permissions: user.permissions,
   };
   }
 }

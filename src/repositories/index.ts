@@ -5,3 +5,4 @@ export * from './address.repository';
 export * from './enrollment.repository';
 export * from './roles.repository';
 export * from './user.repository';
+export * from './job.repository';
